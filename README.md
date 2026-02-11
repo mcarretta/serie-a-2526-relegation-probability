@@ -1,7 +1,7 @@
 # Serie A Relegation Monte Carlo Simulator
 
 This project provides a parallelized Monte Carlo simulation engine designed to estimate relegation probabilities for Serie A teams as of Matchday 24. It moves beyond simple win/loss ratios by simulating individual match scores based on offensive/defensive strength, recent form, and stochastic "chaos" factors.
-
+P.S. Sempre Forza Parma 💛💙
 ---
 
 ## 1. Statistical Core: Poisson Distribution
