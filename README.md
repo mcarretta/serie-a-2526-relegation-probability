@@ -93,7 +93,10 @@ $$
 
 ## Usage
 
-1. Install requirements (see `requirements.txt` if provided)
+1. Install requirements:
+   ```bash
+   pip install -r requirements.txt
+   ```
 2. Run the main script:
    ```bash
    python relegation_proba_with_strength.py
