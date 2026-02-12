@@ -26,14 +26,9 @@ The engine calculates base ratings by comparing a team's performance to the leag
 
 Base strength is normalized such that **1.0** represents the league average.
 
-- **Attack Strength ($Att$):**
-  $$
-  \frac{\text{Goals Scored} / \text{Games Played}}{\text{League Avg Goals Scored} / \text{Games Played}}
-  $$
-- **Defense Strength ($Def$):**
-  $$
-  \frac{\text{Goals Conceded} / \text{Games Played}}{\text{League Avg Goals Conceded} / \text{Games Played}}
-  $$
+- **Attack Strength ($Att$):** $\frac{\text{Goals Scored} / \text{Games Played}}{\text{League Avg Goals Scored} / \text{Games Played}}$
+
+- **Defense Strength ($Def$):** $\frac{\text{Goals Conceded} / \text{Games Played}}{\text{League Avg Goals Conceded} / \text{Games Played}}$
 
 ### Recent Form Adjustment
 
