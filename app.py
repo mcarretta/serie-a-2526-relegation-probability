@@ -25,8 +25,28 @@ from data import (
 st.set_page_config(
     page_title="Serie A 2025/26 Relegation Probabilities",
     page_icon="⚽",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="auto"  # Auto-collapse sidebar on mobile
 )
+
+# Mobile-friendly CSS
+st.markdown("""
+    <style>
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+        .stButton button {
+            width: 100%;
+        }
+        .element-container {
+            width: 100%;
+        }
+    }
+    /* Ensure proper viewport scaling on mobile */
+    [data-testid="stMetricValue"] {
+        font-size: clamp(1rem, 4vw, 2rem);
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
 
 # ==========================================
@@ -96,7 +116,8 @@ def render_standings_sidebar():
 
 def render_header(chaos_factor: float, n_simulations: int, include_form: bool, n_workers: int):
     """Render main content header."""
-    col1, col2 = st.columns([2, 1])
+    # Use responsive columns that stack on mobile
+    col1, col2 = st.columns([2, 1], gap="medium")
 
     with col1:
         st.subheader("🎲 Run Simulation")
@@ -214,7 +235,7 @@ def render_insights(results_df: pd.DataFrame):
     st.subheader("🔍 Key Insights")
 
     most_likely = results_df.iloc[0]
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3 = st.columns(3, gap="medium")
 
     with col1:
         st.metric(
