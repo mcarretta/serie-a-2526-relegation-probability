@@ -9,9 +9,11 @@ font="sans serif"
 [server]
 # Mobile Safari compatibility settings
 enableCORS = false
-enableXsrfProtection = false
+enableXsrfProtection = true
 maxUploadSize = 200
 enableWebsocketCompression = true
+headless = true
+websocketCompression = false
 
 [browser]
 # Ensure proper viewport on mobile

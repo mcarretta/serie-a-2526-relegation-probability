@@ -25,46 +25,47 @@ from data import (
 st.set_page_config(
     page_title="Serie A 2025/26 Relegation Probabilities",
     page_icon="⚽",
-    layout="wide",
-    initial_sidebar_state="auto"  # Auto-collapse sidebar on mobile
+    layout="centered",  # Changed from "wide" for better mobile support
+    initial_sidebar_state="collapsed"  # Collapsed by default on mobile
 )
 
 # Mobile-friendly CSS with iOS Safari specific fixes
 st.markdown("""
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
-    /* Mobile responsiveness */
+    /* Base mobile responsiveness */
+    .main .block-container {
+        max-width: 100%;
+        padding: 1rem;
+    }
+    
     @media (max-width: 768px) {
         .stButton button {
             width: 100%;
+            min-height: 44px;
         }
         .element-container {
             width: 100%;
         }
-        /* Fix iOS Safari rendering issues */
-        .main .block-container {
-            max-width: 100%;
-            padding-left: 1rem;
-            padding-right: 1rem;
-        }
         /* Prevent zoom on iOS */
-        input, select, textarea {
+        input, select, textarea, button {
             font-size: 16px !important;
         }
+        /* Fix dataframe overflow */
+        [data-testid="stDataFrame"] {
+            width: 100%;
+            overflow-x: auto;
+        }
     }
-    /* Ensure proper viewport scaling on mobile */
-    [data-testid="stMetricValue"] {
-        font-size: clamp(1rem, 4vw, 2rem);
-    }
+    
     /* iOS Safari specific fixes */
     @supports (-webkit-touch-callout: none) {
-        /* Fix for iOS Safari height issues */
         .main {
             min-height: -webkit-fill-available;
         }
     }
-    /* Improve touch targets for mobile */
-    button, a {
+    
+    /* Improve touch targets */
+    button, a, [role="button"] {
         min-height: 44px;
         min-width: 44px;
     }
