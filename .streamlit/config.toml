@@ -6,3 +6,9 @@ secondaryBackgroundColor="#f0f2f6"
 textColor="#262730"
 font="sans serif"
 
+[server]
+# Help with Safari's cross-site tracking restrictions
+enableCORS = false
+enableXsrfProtection = false
+
+

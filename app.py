@@ -25,53 +25,9 @@ from data import (
 st.set_page_config(
     page_title="Serie A 2025/26 Relegation Probabilities",
     page_icon="⚽",
-    layout="centered",  # Changed from "wide" for better mobile support
-    initial_sidebar_state="collapsed"  # Collapsed by default on mobile
+    layout="centered",
+    initial_sidebar_state="expanded"
 )
-
-# Mobile-friendly CSS with iOS Safari specific fixes
-st.markdown("""
-    <style>
-    /* Base mobile responsiveness */
-    .main .block-container {
-        max-width: 100%;
-        padding: 1rem;
-    }
-    
-    @media (max-width: 768px) {
-        .stButton button {
-            width: 100%;
-            min-height: 44px;
-        }
-        .element-container {
-            width: 100%;
-        }
-        /* Prevent zoom on iOS */
-        input, select, textarea, button {
-            font-size: 16px !important;
-        }
-        /* Fix dataframe overflow */
-        [data-testid="stDataFrame"] {
-            width: 100%;
-            overflow-x: auto;
-        }
-    }
-    
-    /* iOS Safari specific fixes */
-    @supports (-webkit-touch-callout: none) {
-        .main {
-            min-height: -webkit-fill-available;
-        }
-    }
-    
-    /* Improve touch targets */
-    button, a, [role="button"] {
-        min-height: 44px;
-        min-width: 44px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
 
 # ==========================================
 # SIDEBAR
@@ -204,6 +160,18 @@ def render_results(
     st.success("✅ Simulation complete!")
     st.markdown("---")
 
+    # Color legend for risk highlights
+    st.markdown("""
+    <div style='font-size:0.98em; margin-bottom:0.5em;'>
+        <b>Risk Color Legend:</b>
+        <span style='background-color:#ffcccc; padding:0.2em 0.7em; border-radius:4px; margin-left:0.5em;'>Critical</span>
+        <span style='background-color:#ffe6cc; padding:0.2em 0.7em; border-radius:4px; margin-left:0.5em;'>High Risk</span>
+        <span style='background-color:#fff2cc; padding:0.2em 0.7em; border-radius:4px; margin-left:0.5em;'>At Risk</span>
+        <span style='background-color:#ffffcc; padding:0.2em 0.7em; border-radius:4px; margin-left:0.5em;'>Unsafe</span>
+        <span style='background-color:#ccffcc; padding:0.2em 0.7em; border-radius:4px; margin-left:0.5em;'>Safe</span>
+    </div>
+    """, unsafe_allow_html=True)
+
     # Prepare results dataframe
     excluded_teams = [
         team for team, stats in TEAMS_DATA.items()
@@ -291,9 +259,14 @@ def render_insights(results_df: pd.DataFrame):
 
 def main():
     """Main application entry point."""
-    st.title("⚽ Serie A 2025/26 Relegation Probabilities")
-    st.markdown("**Monte Carlo Simulation Engine**")
-    st.markdown("---")
+    st.markdown("""
+    <h1 style='font-size:2.5em; margin-bottom:0.2em;'>⚽ Serie A 2025/26 Relegation Probabilities</h1>
+    <div style='font-size:1.15em; color:#444; margin-bottom:0.5em;'>
+        A Monte Carlo simulation tool to estimate relegation risks for every team, using advanced statistical modeling and recent form.
+    </div>
+    <hr style='margin-top:0.5em; margin-bottom:1em;'/>
+    """, unsafe_allow_html=True)
+    st.info("👋 Welcome! Adjust the simulation settings in the sidebar and click <b>Run Simulation</b> to see the latest probabilities.", icon="ℹ️")
 
     # Sidebar
     chaos_factor, n_simulations, include_form, n_workers = render_sidebar()
@@ -338,6 +311,15 @@ def main():
     # Footer
     st.markdown("---")
     st.markdown("*Simulation based on Monte Carlo method using Poisson distribution for goal scoring.*")
+
+    # About section
+    st.markdown("""
+    ### 👤 About the Author
+    
+    Hi, I'm **Matteo** — an AI/Applied Scientist living and working in Berlin with a passion for technology and AI, football, and music. One of my goals for 2026 is to work on a few personal projects applying AI to my other passions.
+    
+    [Connect with me on LinkedIn](https://www.linkedin.com/in/matteo-carretta-4322ba175/)
+    """)
 
 
 if __name__ == "__main__":
