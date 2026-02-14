@@ -131,8 +131,7 @@ def render_standings_sidebar():
     ]).sort_values("Pts", ascending=False).reset_index(drop=True)
 
     standings_df.index = standings_df.index + 1
-    # Use smaller height on mobile for better performance
-    st.sidebar.dataframe(standings_df, use_container_width=True, height=350)
+    st.sidebar.dataframe(standings_df, use_container_width=True, height=400)
 
 
 # ==========================================
