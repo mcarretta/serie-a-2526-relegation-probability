@@ -87,7 +87,7 @@ def render_standings_sidebar():
     ]).sort_values("Pts", ascending=False).reset_index(drop=True)
 
     standings_df.index = standings_df.index + 1
-    st.sidebar.dataframe(standings_df, use_container_width=True, height=400)
+    st.sidebar.dataframe(standings_df, width='stretch', height=400)
 
 
 # ==========================================
@@ -131,7 +131,7 @@ def render_form_table():
         "Points (Last 5)", ascending=False
     ).reset_index(drop=True)
 
-    st.dataframe(form_df, use_container_width=True, hide_index=True)
+    st.dataframe(form_df, width='stretch', hide_index=True)
 
 
 def highlight_status(row) -> list[str]:
@@ -211,7 +211,7 @@ def render_results(
         "Change %": "{:+.2f}%"
     })
 
-    st.dataframe(styled_df, use_container_width=True, hide_index=True)
+    st.dataframe(styled_df, width='stretch', hide_index=True)
 
     # Visualization
     st.subheader("📊 Probability Distribution")
@@ -275,7 +275,7 @@ def main():
     render_header(chaos_factor, n_simulations, include_form, n_workers)
 
     # Run simulation button
-    if st.button("🚀 Run Simulation", type="primary", use_container_width=True):
+    if st.button("🚀 Run Simulation", type="primary", width='stretch'):
         with st.spinner(f"Running {n_simulations:,} simulations on {n_workers} CPU cores..."):
             progress_bar = st.progress(0)
 
