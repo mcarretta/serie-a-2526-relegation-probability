@@ -3,9 +3,37 @@ Serie A 2025/26 Season Data
 
 This module contains all the team data, fixtures, and form information
 for the Serie A 2025/26 season simulation.
+
+Data can be loaded from:
+1. Live API (API-Football) when FOOTBALL_API_KEY is set
+2. Static fallback data defined in this module
 """
 
-from typing import Dict, List, Tuple
+import os
+import logging
+from typing import Dict, List, Tuple, Optional
+
+# Load .env file if available
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # dotenv not installed, skip
+
+# ==========================================
+# DATA SOURCE CONFIGURATION
+# ==========================================
+
+# Set to True to force using static data even if API key is available
+USE_STATIC_DATA = False
+
+# Module-level data holders (populated on first access)
+_teams_data: Optional[Dict[str, Dict[str, int]]] = None
+_last_5_performance: Optional[Dict[str, List[int]]] = None
+_fixtures: Optional[List[Tuple[str, str]]] = None
+_data_source: str = "not loaded"
+
+logger = logging.getLogger(__name__)
 
 # ==========================================
 # TEAM DATA
@@ -197,4 +225,115 @@ def get_form_points(team: str) -> int:
     if team not in LAST_5_PERFORMANCE:
         return 0
     return sum(LAST_5_PERFORMANCE[team])
+
+
+# ==========================================
+# LIVE DATA LOADING
+# ==========================================
+
+def _load_data_from_api() -> bool:
+    """
+    Attempt to load data from the Football API.
+
+    Returns:
+        True if successful, False otherwise
+    """
+    global _teams_data, _last_5_performance, _fixtures, _data_source, TEAMS_DATA, LAST_5_PERFORMANCE, FIXTURES
+
+    try:
+        from api_client import load_live_data, apply_name_mapping
+
+        teams, form, fixtures = load_live_data()
+        teams, form, fixtures = apply_name_mapping(teams, form, fixtures)
+
+        # Update module-level variables
+        _teams_data = teams
+        _last_5_performance = form
+        _fixtures = fixtures
+
+        # Also update the exported constants for backward compatibility
+        TEAMS_DATA.clear()
+        TEAMS_DATA.update(teams)
+
+        LAST_5_PERFORMANCE.clear()
+        LAST_5_PERFORMANCE.update(form)
+
+        FIXTURES.clear()
+        FIXTURES.extend(fixtures)
+
+        _data_source = "live API"
+        logger.info(f"Loaded live data: {len(teams)} teams, {len(fixtures)} fixtures")
+        return True
+
+    except ImportError as e:
+        logger.warning(f"API client not available: {e}")
+        return False
+    except ValueError as e:
+        logger.warning(f"API configuration error: {e}")
+        return False
+    except Exception as e:
+        logger.warning(f"Failed to load from API: {e}")
+        return False
+
+
+def _use_static_data() -> None:
+    """Use the static data defined in this module."""
+    global _teams_data, _last_5_performance, _fixtures, _data_source
+
+    _teams_data = TEAMS_DATA.copy()
+    _last_5_performance = {k: v.copy() for k, v in LAST_5_PERFORMANCE.items()}
+    _fixtures = FIXTURES.copy()
+    _data_source = "static fallback"
+    logger.info("Using static fallback data")
+
+
+def load_data(force_refresh: bool = False) -> Tuple[Dict[str, Dict[str, int]], Dict[str, List[int]], List[Tuple[str, str]]]:
+    """
+    Load team data, form, and fixtures.
+
+    Attempts to load from API first, falls back to static data if unavailable.
+
+    Args:
+        force_refresh: If True, reload data even if already cached
+
+    Returns:
+        Tuple of (teams_data, form_data, fixtures)
+    """
+    global _teams_data, _last_5_performance, _fixtures
+
+    # Return cached data if available
+    if not force_refresh and _teams_data is not None:
+        return _teams_data, _last_5_performance, _fixtures
+
+    # Try API first (unless explicitly disabled)
+    if not USE_STATIC_DATA:
+        api_key = os.environ.get("FOOTBALL_API_KEY")
+        if api_key:
+            if _load_data_from_api():
+                return _teams_data, _last_5_performance, _fixtures
+
+    # Fall back to static data
+    _use_static_data()
+    return _teams_data, _last_5_performance, _fixtures
+
+
+def get_data_source() -> str:
+    """
+    Get the current data source.
+
+    Returns:
+        String describing the data source ("live API", "static fallback", or "not loaded")
+    """
+    return _data_source
+
+
+def is_using_live_data() -> bool:
+    """
+    Check if currently using live API data.
+
+    Returns:
+        True if using live data, False otherwise
+    """
+    return _data_source == "live API"
+
 

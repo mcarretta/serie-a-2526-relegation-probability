@@ -9,13 +9,16 @@ import pandas as pd
 
 from simulation import run_simulation, get_risk_status, get_available_cpus
 from data import (
-    TEAMS_DATA,
-    FIXTURES,
-    LAST_5_PERFORMANCE,
+    load_data,
+    get_data_source,
+    is_using_live_data,
     get_relegation_zone_teams,
     get_form_string,
     get_form_points,
 )
+
+# Load data at startup (will use API if available, otherwise fallback to static)
+TEAMS_DATA, LAST_5_PERFORMANCE, FIXTURES = load_data()
 
 
 # ==========================================
@@ -72,9 +75,46 @@ def render_sidebar() -> tuple[float, int, bool, int]:
     )
 
     st.sidebar.markdown("---")
+    render_api_settings_sidebar()
+
+    st.sidebar.markdown("---")
     render_standings_sidebar()
 
     return chaos_factor, n_simulations, include_form, n_workers
+
+
+def render_api_settings_sidebar():
+    """Render API settings in sidebar."""
+    import os
+
+    st.sidebar.markdown("### 📡 Data Source")
+
+    # Check if API key is already configured
+    api_key_configured = bool(os.environ.get("FOOTBALL_API_KEY"))
+
+    # Try to check Streamlit secrets
+    try:
+        if "FOOTBALL_API_KEY" in st.secrets:
+            api_key_configured = True
+    except Exception:
+        pass
+
+    if api_key_configured:
+        st.sidebar.success("✅ API key configured")
+    else:
+        st.sidebar.warning("⚠️ Using static data")
+
+        # API key input
+        api_key = st.sidebar.text_input(
+            "API-Football Key",
+            type="password",
+            help="Enter your API-Football key to enable live data. Get one at api-football.com"
+        )
+
+        if api_key:
+            os.environ["FOOTBALL_API_KEY"] = api_key
+            st.sidebar.success("✅ API key set for this session")
+            st.rerun()
 
 
 def render_standings_sidebar():
@@ -259,6 +299,8 @@ def render_insights(results_df: pd.DataFrame):
 
 def main():
     """Main application entry point."""
+    global TEAMS_DATA, LAST_5_PERFORMANCE, FIXTURES
+
     st.markdown("""
     <h1 style='font-size:2.5em; margin-bottom:0.2em;'>⚽ Serie A 2025/26 Relegation Probabilities</h1>
     <div style='font-size:1.15em; color:#444; margin-bottom:0.5em;'>
@@ -266,6 +308,22 @@ def main():
     </div>
     <hr style='margin-top:0.5em; margin-bottom:1em;'/>
     """, unsafe_allow_html=True)
+
+    # Data source indicator
+    data_source = get_data_source()
+    if is_using_live_data():
+        st.success(f"📡 **Data Source:** {data_source} (live from API-Football)", icon="✅")
+    else:
+        st.warning(f"📊 **Data Source:** {data_source}", icon="⚠️")
+        st.info("💡 Set `FOOTBALL_API_KEY` environment variable to enable live data.")
+
+    # Refresh data button
+    col_refresh, col_info = st.columns([1, 3])
+    with col_refresh:
+        if st.button("🔄 Refresh Data", help="Reload data from API"):
+            TEAMS_DATA, LAST_5_PERFORMANCE, FIXTURES = load_data(force_refresh=True)
+            st.rerun()
+
     st.info("👋 Welcome! Adjust the simulation settings in the sidebar and click Run Simulation to see the latest probabilities.", icon="ℹ️")
 
     # Sidebar
