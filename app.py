@@ -25,7 +25,7 @@ from data import (
 st.set_page_config(
     page_title="Serie A 2025/26 Relegation Probabilities",
     page_icon="⚽",
-    layout="centered",
+    layout="wide",
     initial_sidebar_state="expanded"
 )
 
@@ -266,7 +266,7 @@ def main():
     </div>
     <hr style='margin-top:0.5em; margin-bottom:1em;'/>
     """, unsafe_allow_html=True)
-    st.info("👋 Welcome! Adjust the simulation settings in the sidebar and click <b>Run Simulation</b> to see the latest probabilities.", icon="ℹ️")
+    st.info("👋 Welcome! Adjust the simulation settings in the sidebar and click Run Simulation to see the latest probabilities.", icon="ℹ️")
 
     # Sidebar
     chaos_factor, n_simulations, include_form, n_workers = render_sidebar()
@@ -310,8 +310,7 @@ def main():
 
     # Footer
     st.markdown("---")
-    st.markdown("*Simulation based on Monte Carlo method using Poisson distribution for goal scoring.*")
-
+    st.markdown('[ℹ️ Read more in the project README](https://github.com/mcarretta/serie-a-2526-relegation-probability/tree/main)')
     # About section
     st.markdown("""
     ### 👤 About the Author
