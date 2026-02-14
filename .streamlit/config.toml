@@ -5,3 +5,15 @@ backgroundColor="#ffffff"
 secondaryBackgroundColor="#f0f2f6"
 textColor="#262730"
 font="sans serif"
+
+[server]
+# Mobile Safari compatibility settings
+enableCORS = false
+enableXsrfProtection = true
+maxUploadSize = 200
+enableWebsocketCompression = true
+
+[browser]
+# Ensure proper viewport on mobile
+gatherUsageStats = false
+

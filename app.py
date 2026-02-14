@@ -29,8 +29,9 @@ st.set_page_config(
     initial_sidebar_state="auto"  # Auto-collapse sidebar on mobile
 )
 
-# Mobile-friendly CSS
+# Mobile-friendly CSS with iOS Safari specific fixes
 st.markdown("""
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
     /* Mobile responsiveness */
     @media (max-width: 768px) {
@@ -40,10 +41,32 @@ st.markdown("""
         .element-container {
             width: 100%;
         }
+        /* Fix iOS Safari rendering issues */
+        .main .block-container {
+            max-width: 100%;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        /* Prevent zoom on iOS */
+        input, select, textarea {
+            font-size: 16px !important;
+        }
     }
     /* Ensure proper viewport scaling on mobile */
     [data-testid="stMetricValue"] {
         font-size: clamp(1rem, 4vw, 2rem);
+    }
+    /* iOS Safari specific fixes */
+    @supports (-webkit-touch-callout: none) {
+        /* Fix for iOS Safari height issues */
+        .main {
+            min-height: -webkit-fill-available;
+        }
+    }
+    /* Improve touch targets for mobile */
+    button, a {
+        min-height: 44px;
+        min-width: 44px;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -107,7 +130,8 @@ def render_standings_sidebar():
     ]).sort_values("Pts", ascending=False).reset_index(drop=True)
 
     standings_df.index = standings_df.index + 1
-    st.sidebar.dataframe(standings_df, use_container_width=True, height=400)
+    # Use smaller height on mobile for better performance
+    st.sidebar.dataframe(standings_df, use_container_width=True, height=350)
 
 
 # ==========================================
