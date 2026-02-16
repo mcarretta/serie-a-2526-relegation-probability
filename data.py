@@ -11,30 +11,29 @@ from typing import Dict, List, Tuple
 # TEAM DATA
 # ==========================================
 
-# Points, Goals For (GF), Goals Against (GA) after 24 matchdays
+# Points, Goals For (GF), Goals Against (GA) after 25 matchdays
 TEAMS_DATA: Dict[str, Dict[str, int]] = {
-    # --- Relegation Battle teams ---
-    'Lazio': {'Pts': 33, 'GF': 26, 'GA': 23},
-    'Udinese': {'Pts': 32, 'GF': 27, 'GA': 36},
-    'Bologna': {'Pts': 30, 'GF': 32, 'GA': 31},
-    'Sassuolo': {'Pts': 29, 'GF': 27, 'GA': 34},
-    'Cagliari': {'Pts': 28, 'GF': 28, 'GA': 33},
-    'Torino': {'Pts': 27, 'GF': 24, 'GA': 42},
-    'Parma': {'Pts': 26, 'GF': 16, 'GA': 30},
-    'Genoa': {'Pts': 23, 'GF': 29, 'GA': 37},
-    'Cremonese': {'Pts': 23, 'GF': 21, 'GA': 33},
-    'Lecce': {'Pts': 21, 'GF': 15, 'GA': 31},
-    'Fiorentina': {'Pts': 18, 'GF': 27, 'GA': 38},
-    'Pisa': {'Pts': 15, 'GF': 19, 'GA': 40},
-    'Verona': {'Pts': 15, 'GF': 18, 'GA': 41},
-    # --- Top/Mid Table teams ---
-    'Inter': {'Pts': 58, 'GF': 57, 'GA': 19},
-    'Milan': {'Pts': 50, 'GF': 38, 'GA': 17},
-    'Napoli': {'Pts': 49, 'GF': 36, 'GA': 23},
-    'Juventus': {'Pts': 46, 'GF': 41, 'GA': 20},
-    'Roma': {'Pts': 46, 'GF': 29, 'GA': 14},
-    'Como': {'Pts': 41, 'GF': 37, 'GA': 16},
-    'Atalanta': {'Pts': 39, 'GF': 32, 'GA': 21},
+    # Sorted by points (descending)
+    'Inter': {'Pts': 61, 'GF': 60, 'GA': 21},
+    'Milan': {'Pts': 53, 'GF': 40, 'GA': 18},
+    'Napoli': {'Pts': 50, 'GF': 38, 'GA': 25},
+    'Roma': {'Pts': 47, 'GF': 31, 'GA': 27},
+    'Juventus': {'Pts': 46, 'GF': 43, 'GA': 22},
+    'Atalanta': {'Pts': 42, 'GF': 34, 'GA': 23},
+    'Como': {'Pts': 41, 'GF': 38, 'GA': 18},
+    'Bologna': {'Pts': 33, 'GF': 34, 'GA': 32},
+    'Lazio': {'Pts': 33, 'GF': 26, 'GA': 25},
+    'Sassuolo': {'Pts': 32, 'GF': 29, 'GA': 37},
+    'Udinese': {'Pts': 32, 'GF': 28, 'GA': 38},
+    'Parma': {'Pts': 29, 'GF': 18, 'GA': 31},
+    'Cagliari': {'Pts': 28, 'GF': 28, 'GA': 37},
+    'Torino': {'Pts': 27, 'GF': 26, 'GA': 44},
+    'Lecce': {'Pts': 24, 'GF': 19, 'GA': 31},
+    'Cremonese': {'Pts': 24, 'GF': 21, 'GA': 33},
+    'Genoa': {'Pts': 24, 'GF': 29, 'GA': 37},
+    'Fiorentina': {'Pts': 21, 'GF': 31, 'GA': 39},
+    'Pisa': {'Pts': 15, 'GF': 21, 'GA': 42},
+    'Verona': {'Pts': 15, 'GF': 19, 'GA': 43},
 }
 
 
@@ -45,25 +44,25 @@ TEAMS_DATA: Dict[str, Dict[str, int]] = {
 # Points earned in last 5 games (3=Win, 1=Draw, 0=Loss)
 LAST_5_PERFORMANCE: Dict[str, List[int]] = {
     'Inter': [3, 3, 3, 3, 3],
-    'Napoli': [1, 3, 0, 3, 3],
-    'Milan': [1, 3, 3, 1, 3],
-    'Juventus': [3, 0, 3, 3, 1],
-    'Atalanta': [3, 1, 3, 1, 3],
-    'Roma': [3, 3, 1, 0, 3],
-    'Como': [1, 0, 3, 3, 1],
-    'Lazio': [3, 0, 1, 3, 1],
-    'Udinese': [1, 0, 3, 3, 0],
-    'Bologna': [3, 0, 0, 0, 0],
-    'Sassuolo': [0, 0, 3, 3, 0],
-    'Cagliari': [0, 3, 3, 3, 0],
-    'Torino': [0, 0, 0, 3, 1],
-    'Parma': [1, 1, 0, 0, 3],
-    'Genoa': [3, 1, 3, 0, 0],
-    'Cremonese': [0, 1, 0, 0, 0],
-    'Lecce': [0, 0, 1, 0, 3],
-    'Fiorentina': [1, 3, 0, 0, 1],
-    'Pisa': [1, 1, 0, 0, 1],
-    'Verona': [0, 1, 0, 0, 1],
+    'Napoli': [3, 0, 3, 3, 1],
+    'Milan': [3, 3, 1, 3, 3],
+    'Juventus': [0, 3, 3, 1, 0],
+    'Atalanta': [1, 3, 1, 3, 3],
+    'Roma': [3, 1, 0, 3, 1],
+    'Como': [0, 3, 3, 1, 0],
+    'Lazio': [0, 1, 3, 1, 0],
+    'Udinese': [0, 3, 3, 0, 0],
+    'Bologna': [0, 0, 0, 0, 3],
+    'Sassuolo': [0, 3, 3, 0, 3],
+    'Cagliari': [3, 3, 3, 0, 0],
+    'Torino': [0, 0, 3, 1, 0],
+    'Parma': [1, 0, 0, 3, 3],
+    'Genoa': [1, 3, 0, 0, 1],
+    'Cremonese': [1, 0, 0, 0, 1],
+    'Lecce': [0, 1, 0, 3, 3],
+    'Fiorentina': [3, 0, 0, 1, 3],
+    'Pisa': [1, 0, 0, 1, 0],
+    'Verona': [1, 0, 0, 1, 0],
 }
 
 
@@ -73,11 +72,6 @@ LAST_5_PERFORMANCE: Dict[str, List[int]] = {
 
 # Remaining fixtures from Matchday 25 to 38
 FIXTURES: List[Tuple[str, str]] = [
-    # Matchday 25
-    ('Pisa', 'Milan'), ('Como', 'Fiorentina'), ('Lazio', 'Atalanta'), ('Inter', 'Juventus'),
-    ('Udinese', 'Sassuolo'), ('Parma', 'Verona'), ('Cremonese', 'Genoa'), ('Torino', 'Bologna'),
-    ('Napoli', 'Roma'), ('Cagliari', 'Lecce'),
-
     # Matchday 24 (Rescheduled)
     ('Milan', 'Como'),
 
