@@ -87,7 +87,7 @@ def render_standings_sidebar():
     ]).sort_values("Pts", ascending=False).reset_index(drop=True)
 
     standings_df.index = standings_df.index + 1
-    st.sidebar.dataframe(standings_df, width='stretch', height=400)
+    st.sidebar.dataframe(standings_df, height=400, use_container_width=True)
 
 
 # ==========================================
@@ -131,7 +131,7 @@ def render_form_table():
         "Points (Last 5)", ascending=False
     ).reset_index(drop=True)
 
-    st.dataframe(form_df, width='stretch', hide_index=True)
+    st.dataframe(form_df, use_container_width=True, hide_index=True)
 
 
 def highlight_status(row) -> list[str]:
@@ -154,11 +154,16 @@ def render_results(
     results_baseline: dict,
     results_form: dict,
     n_simulations: int,
-    include_form: bool
+    include_form: bool,
+    avg_points: dict,
+    min_safe_points: float
 ):
     """Render simulation results."""
     st.success("✅ Simulation complete!")
     st.markdown("---")
+
+    # Display projected minimum safe points
+    st.info(f"**Projected minimum points to avoid relegation:** {min_safe_points:.1f} pts", icon="📊")
 
     # Color legend for risk highlights
     st.markdown("""
@@ -186,11 +191,13 @@ def render_results(
         baseline_prob = (results_baseline[team] / n_simulations) * 100
         form_prob = (results_form[team] / n_simulations) * 100
         change = form_prob - baseline_prob
+        predicted_pts = avg_points[team]
 
         if form_prob > 0.01 or baseline_prob > 0.01:
             results_data.append({
                 "Team": team,
                 "Current Pts": TEAMS_DATA[team]["Pts"],
+                "Predicted Pts": predicted_pts,
                 "Baseline %": baseline_prob,
                 "With Form %": form_prob if include_form else baseline_prob,
                 "Change %": change if include_form else 0,
@@ -206,12 +213,13 @@ def render_results(
     st.subheader("📉 Relegation Probabilities")
 
     styled_df = results_df.style.apply(highlight_status, axis=1).format({
+        "Predicted Pts": "{:.1f}",
         "Baseline %": "{:.2f}%",
         "With Form %": "{:.2f}%",
         "Change %": "{:+.2f}%"
     })
 
-    st.dataframe(styled_df, width='stretch', hide_index=True)
+    st.dataframe(styled_df, use_container_width=True, hide_index=True)
 
     # Visualization
     st.subheader("📊 Probability Distribution")
@@ -275,13 +283,13 @@ def main():
     render_header(chaos_factor, n_simulations, include_form, n_workers)
 
     # Run simulation button
-    if st.button("🚀 Run Simulation", type="primary", width='stretch'):
+    if st.button("🚀 Run Simulation", type="primary", use_container_width=True):
         with st.spinner(f"Running {n_simulations:,} simulations on {n_workers} CPU cores..."):
             progress_bar = st.progress(0)
 
             # Run baseline simulation
             progress_bar.progress(25)
-            results_baseline = run_simulation(
+            results_baseline, avg_points_baseline, min_safe_baseline = run_simulation(
                 TEAMS_DATA, FIXTURES, chaos_factor,
                 form_data=None, n_sims=n_simulations,
                 use_parallel=True, n_workers=n_workers
@@ -291,17 +299,20 @@ def main():
 
             # Run with form if enabled
             if include_form:
-                results_form = run_simulation(
+                results_form, avg_points_form, min_safe_form = run_simulation(
                     TEAMS_DATA, FIXTURES, chaos_factor,
                     form_data=LAST_5_PERFORMANCE, n_sims=n_simulations,
                     use_parallel=True, n_workers=n_workers
                 )
             else:
                 results_form = results_baseline
+                avg_points_form = avg_points_baseline
+                min_safe_form = min_safe_baseline
 
             progress_bar.progress(100)
 
-        render_results(results_baseline, results_form, n_simulations, include_form)
+        render_results(results_baseline, results_form, n_simulations, include_form,
+                       avg_points_form, min_safe_form)
     else:
         st.info("👆 Click the button above to run the Monte Carlo simulation and see relegation probabilities.")
 

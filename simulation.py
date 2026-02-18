@@ -102,7 +102,7 @@ def simulate_match(
 # SEASON SIMULATION
 # ==========================================
 
-def simulate_single_season(args: Tuple) -> List[str]:
+def simulate_single_season(args: Tuple) -> Tuple[List[str], Dict[str, int], int]:
     """
     Run a single season simulation.
 
@@ -110,7 +110,7 @@ def simulate_single_season(args: Tuple) -> List[str]:
         args: Tuple of (teams_data, fixtures, team_ratings, chaos_factor, seed)
 
     Returns:
-        List of 3 relegated team names
+        Tuple of (relegated_teams, final_points_dict, min_safe_points)
     """
     data, fixtures_list, team_ratings, chaos_factor, seed = args
 
@@ -142,7 +142,13 @@ def simulate_single_season(args: Tuple) -> List[str]:
     )
     relegated_teams = [t[0] for t in sorted_table[-3:]]
 
-    return relegated_teams
+    # Get final points for each team
+    final_points = {t: sim_table[t]['Pts'] for t in sim_table}
+
+    # Min safe points = points of 17th place team (first non-relegated)
+    min_safe_points = sorted_table[-4][1]['Pts']
+
+    return relegated_teams, final_points, min_safe_points
 
 
 def run_simulation(
@@ -154,7 +160,7 @@ def run_simulation(
     base_seed: int = 42,
     use_parallel: bool = True,
     n_workers: Optional[int] = None
-) -> Dict[str, int]:
+) -> Tuple[Dict[str, int], Dict[str, float], float]:
     """
     Run Monte Carlo simulation of remaining season.
 
@@ -169,9 +175,14 @@ def run_simulation(
         n_workers: Number of worker processes (default: all CPUs)
 
     Returns:
-        Dictionary mapping team names to relegation counts
+        Tuple of:
+        - Dictionary mapping team names to relegation counts
+        - Dictionary mapping team names to average predicted points
+        - Average minimum points to avoid relegation
     """
     relegation_counts = {t: 0 for t in teams_data}
+    total_points = {t: 0 for t in teams_data}
+    total_min_safe_points = 0
     team_ratings = get_team_ratings(teams_data, form_data)
 
     # Prepare arguments for all simulations
@@ -186,17 +197,27 @@ def run_simulation(
         with Pool(processes=workers) as pool:
             results = pool.map(simulate_single_season, sim_args)
 
-        for relegated_teams in results:
+        for relegated_teams, final_points, min_safe_points in results:
             for team in relegated_teams:
                 relegation_counts[team] += 1
+            for team, pts in final_points.items():
+                total_points[team] += pts
+            total_min_safe_points += min_safe_points
     else:
         # Sequential processing for small simulation counts
         for args in sim_args:
-            relegated_teams = simulate_single_season(args)
+            relegated_teams, final_points, min_safe_points = simulate_single_season(args)
             for team in relegated_teams:
                 relegation_counts[team] += 1
+            for team, pts in final_points.items():
+                total_points[team] += pts
+            total_min_safe_points += min_safe_points
 
-    return relegation_counts
+    # Calculate averages
+    avg_points = {t: total_points[t] / n_sims for t in teams_data}
+    avg_min_safe_points = total_min_safe_points / n_sims
+
+    return relegation_counts, avg_points, avg_min_safe_points
 
 
 def get_available_cpus() -> int:
