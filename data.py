@@ -15,12 +15,12 @@ from typing import Dict, List, Tuple
 TEAMS_DATA: Dict[str, Dict[str, int]] = {
     # Sorted by points (descending)
     'Inter': {'Pts': 61, 'GF': 60, 'GA': 21},
-    'Milan': {'Pts': 53, 'GF': 40, 'GA': 18},
+    'Milan': {'Pts': 54, 'GF': 41, 'GA': 19},
     'Napoli': {'Pts': 50, 'GF': 38, 'GA': 25},
     'Roma': {'Pts': 47, 'GF': 31, 'GA': 27},
     'Juventus': {'Pts': 46, 'GF': 43, 'GA': 22},
     'Atalanta': {'Pts': 42, 'GF': 34, 'GA': 23},
-    'Como': {'Pts': 41, 'GF': 38, 'GA': 18},
+    'Como': {'Pts': 42, 'GF': 39, 'GA': 19},
     'Bologna': {'Pts': 33, 'GF': 34, 'GA': 32},
     'Lazio': {'Pts': 33, 'GF': 26, 'GA': 25},
     'Sassuolo': {'Pts': 32, 'GF': 29, 'GA': 37},
@@ -45,11 +45,11 @@ TEAMS_DATA: Dict[str, Dict[str, int]] = {
 LAST_5_PERFORMANCE: Dict[str, List[int]] = {
     'Inter': [3, 3, 3, 3, 3],
     'Napoli': [3, 0, 3, 3, 1],
-    'Milan': [3, 3, 1, 3, 3],
+    'Milan': [3, 1, 3, 3, 1],
     'Juventus': [0, 3, 3, 1, 0],
     'Atalanta': [1, 3, 1, 3, 3],
     'Roma': [3, 1, 0, 3, 1],
-    'Como': [0, 3, 3, 1, 0],
+    'Como': [3, 3, 1, 0, 1],
     'Lazio': [0, 1, 3, 1, 0],
     'Udinese': [0, 3, 3, 0, 0],
     'Bologna': [0, 0, 0, 0, 3],
@@ -72,9 +72,6 @@ LAST_5_PERFORMANCE: Dict[str, List[int]] = {
 
 # Remaining fixtures from Matchday 25 to 38
 FIXTURES: List[Tuple[str, str]] = [
-    # Matchday 24 (Rescheduled)
-    ('Milan', 'Como'),
-
     # Matchday 26
     ('Sassuolo', 'Verona'), ('Juventus', 'Como'), ('Lecce', 'Inter'), ('Cagliari', 'Lazio'),
     ('Genoa', 'Torino'), ('Atalanta', 'Napoli'), ('Milan', 'Parma'), ('Roma', 'Cremonese'),
