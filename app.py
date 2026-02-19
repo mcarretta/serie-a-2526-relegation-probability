@@ -163,7 +163,7 @@ def render_results(
     st.markdown("---")
 
     # Display projected minimum safe points
-    st.info(f"https://serie-a-relegation-probability.streamlit.app/**Projected minimum points to avoid relegation:** {min_safe_points:.1f} pts", icon="📊")
+    st.info(f"**Projected minimum points to avoid relegation:** {min_safe_points:.1f} pts", icon="📊")
 
     # Color legend for risk highlights
     st.markdown("""
