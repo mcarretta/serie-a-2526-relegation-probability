@@ -40,7 +40,7 @@ def render_sidebar() -> tuple[float, int, bool, int]:
     chaos_factor = st.sidebar.slider(
         "Chaos Factor",
         min_value=0.0,
-        max_value=0.5,
+        max_value=1.0,
         value=0.25,
         step=0.05,
         help="Random performance fluctuation per match. Higher = more unpredictable results."
@@ -163,7 +163,7 @@ def render_results(
     st.markdown("---")
 
     # Display projected minimum safe points
-    st.info(f"**Projected minimum points to avoid relegation:** {min_safe_points:.1f} pts", icon="📊")
+    st.info(f"https://serie-a-relegation-probability.streamlit.app/**Projected minimum points to avoid relegation:** {min_safe_points:.1f} pts", icon="📊")
 
     # Color legend for risk highlights
     st.markdown("""
