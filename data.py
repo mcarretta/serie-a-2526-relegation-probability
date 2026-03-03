@@ -11,29 +11,29 @@ from typing import Dict, List, Tuple
 # TEAM DATA
 # ==========================================
 
-# Points, Goals For (GF), Goals Against (GA) after 26 matchdays
+# Points, Goals For (GF), Goals Against (GA) after 27 matchdays
 TEAMS_DATA: Dict[str, Dict[str, int]] = {
     # Sorted by points (descending)
-    'Inter': {'Pts': 64, 'GF': 62, 'GA': 21},
-    'Milan': {'Pts': 54, 'GF': 41, 'GA': 20},
-    'Napoli': {'Pts': 50, 'GF': 39, 'GA': 27},
-    'Roma': {'Pts': 50, 'GF': 34, 'GA': 27},
-    'Juventus': {'Pts': 46, 'GF': 43, 'GA': 24},
-    'Atalanta': {'Pts': 45, 'GF': 36, 'GA': 24},
-    'Como': {'Pts': 45, 'GF': 41, 'GA': 19},
-    'Bologna': {'Pts': 36, 'GF': 35, 'GA': 32},
-    'Sassuolo': {'Pts': 35, 'GF': 32, 'GA': 37},
-    'Lazio': {'Pts': 34, 'GF': 26, 'GA': 25},
-    'Parma': {'Pts': 32, 'GF': 19, 'GA': 31},
-    'Udinese': {'Pts': 32, 'GF': 28, 'GA': 39},
-    'Cagliari': {'Pts': 29, 'GF': 28, 'GA': 37},
-    'Genoa': {'Pts': 27, 'GF': 32, 'GA': 37},
-    'Torino': {'Pts': 27, 'GF': 26, 'GA': 47},
-    'Fiorentina': {'Pts': 24, 'GF': 32, 'GA': 39},
-    'Cremonese': {'Pts': 24, 'GF': 21, 'GA': 36},
-    'Lecce': {'Pts': 24, 'GF': 19, 'GA': 33},
-    'Pisa': {'Pts': 15, 'GF': 21, 'GA': 43},
-    'Verona': {'Pts': 15, 'GF': 19, 'GA': 46},
+    'Inter': {'Pts': 70, 'GF': 66, 'GA': 21},
+    'Milan': {'Pts': 60, 'GF': 45, 'GA': 20},
+    'Napoli': {'Pts': 56, 'GF': 43, 'GA': 29},
+    'Roma': {'Pts': 52, 'GF': 40, 'GA': 33},
+    'Como': {'Pts': 51, 'GF': 47, 'GA': 21},
+    'Juventus': {'Pts': 48, 'GF': 49, 'GA': 30},
+    'Atalanta': {'Pts': 45, 'GF': 38, 'GA': 28},
+    'Bologna': {'Pts': 42, 'GF': 37, 'GA': 32},
+    'Sassuolo': {'Pts': 41, 'GF': 36, 'GA': 39},
+    'Udinese': {'Pts': 38, 'GF': 34, 'GA': 39},
+    'Parma': {'Pts': 34, 'GF': 21, 'GA': 33},
+    'Lazio': {'Pts': 34, 'GF': 26, 'GA': 29},
+    'Torino': {'Pts': 33, 'GF': 30, 'GA': 47},
+    'Cagliari': {'Pts': 31, 'GF': 30, 'GA': 39},
+    'Genoa': {'Pts': 27, 'GF': 32, 'GA': 41},
+    'Cremonese': {'Pts': 24, 'GF': 21, 'GA': 40},
+    'Fiorentina': {'Pts': 24, 'GF': 32, 'GA': 45},
+    'Lecce': {'Pts': 24, 'GF': 21, 'GA': 39},
+    'Pisa': {'Pts': 15, 'GF': 21, 'GA': 45},
+    'Verona': {'Pts': 15, 'GF': 21, 'GA': 50},
 }
 
 
@@ -43,26 +43,26 @@ TEAMS_DATA: Dict[str, Dict[str, int]] = {
 
 # Points earned in last 5 games (3=Win, 1=Draw, 0=Loss)
 LAST_5_PERFORMANCE: Dict[str, List[int]] = {
-    'Inter': [3, 3, 3, 3, 3],       # W (2-0 vs Lecce)
-    'Napoli': [0, 3, 3, 1, 0],       # L (1-2 vs Atalanta)
-    'Milan': [1, 3, 3, 1, 0],        # L (0-1 vs Parma)
-    'Juventus': [3, 3, 1, 0, 0],     # L (0-2 vs Como)
-    'Atalanta': [3, 1, 3, 3, 3],     # W (2-1 vs Napoli)
-    'Roma': [1, 0, 3, 1, 3],         # W (3-0 vs Cremonese)
-    'Como': [3, 1, 0, 1, 3],         # W (2-0 vs Juventus)
-    'Lazio': [1, 3, 1, 0, 1],        # D (0-0 vs Cagliari)
-    'Udinese': [3, 3, 0, 0, 0],      # L (0-1 vs Bologna)
-    'Bologna': [0, 0, 0, 3, 3],      # W (1-0 vs Udinese)
-    'Sassuolo': [3, 3, 0, 3, 3],     # W (3-0 vs Verona)
-    'Cagliari': [3, 3, 0, 0, 1],     # D (0-0 vs Lazio)
-    'Torino': [0, 3, 1, 0, 0],       # L (0-3 vs Genoa)
-    'Parma': [0, 0, 3, 3, 3],        # W (1-0 vs Milan)
-    'Genoa': [3, 0, 0, 1, 3],        # W (3-0 vs Torino)
-    'Cremonese': [0, 0, 0, 1, 0],    # L (0-3 vs Roma)
-    'Lecce': [1, 0, 3, 3, 0],        # L (0-2 vs Inter)
-    'Fiorentina': [0, 0, 1, 3, 3],   # W (1-0 vs Pisa)
-    'Pisa': [0, 0, 1, 0, 0],         # L (0-1 vs Fiorentina)
-    'Verona': [0, 0, 1, 0, 0],       # L (0-3 vs Sassuolo)
+    'Inter': [3, 3, 3, 3, 3],       # W (2-0 vs Genoa)
+    'Milan': [3, 3, 1, 0, 3],        # W (2-0 vs Cremonese)
+    'Napoli': [3, 3, 1, 0, 3],       # W (2-1 vs Verona)
+    'Roma': [0, 3, 1, 3, 1],         # D (3-3 vs Juventus)
+    'Como': [1, 0, 1, 3, 3],         # W (3-1 vs Lecce)
+    'Juventus': [3, 1, 0, 0, 1],     # D (3-3 vs Roma)
+    'Atalanta': [1, 3, 3, 3, 0],     # L (1-2 vs Sassuolo)
+    'Bologna': [0, 0, 3, 3, 3],      # W (1-0 vs Pisa)
+    'Sassuolo': [3, 0, 3, 3, 3],     # W (2-1 vs Atalanta)
+    'Udinese': [3, 0, 0, 0, 3],      # W (3-0 vs Fiorentina)
+    'Lazio': [3, 1, 0, 1, 0],        # L (0-2 vs Torino)
+    'Parma': [0, 3, 3, 3, 1],        # D (1-1 vs Cagliari)
+    'Torino': [3, 1, 0, 0, 3],       # W (2-0 vs Lazio)
+    'Cagliari': [3, 0, 0, 1, 1],     # D (1-1 vs Parma)
+    'Genoa': [0, 0, 1, 3, 0],        # L (0-2 vs Inter)
+    'Cremonese': [0, 0, 1, 0, 0],    # L (0-2 vs Milan)
+    'Fiorentina': [0, 1, 3, 3, 0],   # L (0-3 vs Udinese)
+    'Lecce': [0, 3, 3, 0, 0],        # L (1-3 vs Como)
+    'Pisa': [0, 1, 0, 0, 0],         # L (0-1 vs Bologna)
+    'Verona': [0, 1, 0, 0, 0],       # L (1-2 vs Napoli)
 }
 
 
@@ -70,13 +70,9 @@ LAST_5_PERFORMANCE: Dict[str, List[int]] = {
 # REMAINING FIXTURES
 # ==========================================
 
-# Remaining fixtures from Matchday 27 to 38
+# Remaining fixtures from Matchday 28 to 38
 FIXTURES: List[Tuple[str, str]] = [
 
-    # Matchday 27
-    ('Inter', 'Genoa'), ('Udinese', 'Fiorentina'), ('Cremonese', 'Milan'), ('Verona', 'Napoli'),
-    ('Parma', 'Cagliari'), ('Pisa', 'Bologna'), ('Torino', 'Lazio'), ('Roma', 'Juventus'),
-    ('Sassuolo', 'Atalanta'), ('Como', 'Lecce'),
 
     # Matchday 28
     ('Cagliari', 'Como'), ('Juventus', 'Pisa'), ('Bologna', 'Verona'), ('Lecce', 'Cremonese'),

@@ -191,13 +191,13 @@ def render_results(
         baseline_prob = (results_baseline[team] / n_simulations) * 100
         form_prob = (results_form[team] / n_simulations) * 100
         change = form_prob - baseline_prob
-        predicted_pts = avg_points[team]
 
         if form_prob > 0.01 or baseline_prob > 0.01:
             results_data.append({
                 "Team": team,
                 "Current Pts": TEAMS_DATA[team]["Pts"],
-                "Predicted Pts": predicted_pts,
+                "Predicted Pts": avg_points[team],
+                "Min Safe Pts": min_safe_points,
                 "Baseline %": baseline_prob,
                 "With Form %": form_prob if include_form else baseline_prob,
                 "Change %": change if include_form else 0,
@@ -214,6 +214,7 @@ def render_results(
 
     styled_df = results_df.style.apply(highlight_status, axis=1).format({
         "Predicted Pts": "{:.1f}",
+        "Min Safe Pts": "{:.1f}",
         "Baseline %": "{:.2f}%",
         "With Form %": "{:.2f}%",
         "Change %": "{:+.2f}%"
